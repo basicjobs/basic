@@ -1,0 +1,540 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="www.api.mba.auth.Auth">
+	<select id="selectMberNo" parameterType="map" resultType="CamelHashMap">
+	/* www.api.mba.auth.Auth.mergeMember */
+		SELECT 'M'|| #{mberSeCd} || TO_CHAR(SYSDATE,'YYYYMMDD') || LPAD( MBER_NO_SEQ.NEXTVAL, 4 ,0) AS MBER_NO 
+		  FROM DUAL
+	</select>
+	
+	<insert id="mergeMember" parameterType="map">
+	/* www.api.mba.auth.Auth.mergeMember */
+		MERGE INTO OL_CU_TUPR001 T
+		USING (
+				SELECT
+					   #{mberNo}			AS MBER_NO
+					  ,#{mberNm} 			AS MBER_NM
+					  ,#{telno}  			AS TELNO
+					  ,#{email}  			AS EMAIL
+					  ,#{faxno}  			AS FAXNO
+					  ,#{id} 				AS ID
+					  ,#{password} 			AS PASSWORD
+					  ,#{cstmrNo} 			AS CSTMR_NO
+					  ,#{mberSeCd} 			AS MBER_SE_CD
+					  ,#{cryalTelno} 		AS CRYAL_TELNO
+					  ,#{deptNm} 			AS DEPT_NM
+					  ,#{dursNm} 			AS DURS_NM
+					  ,#{bizrnoAtchId} 		AS BIZRNO_ATCH_ID
+					  ,#{hffcynAtchId} 		AS HFFCYN_ATCH_ID
+					  ,#{crtfcResult} 		AS CRTFC_RESULT
+					  ,#{crtfcMthd} 		AS CRTFC_MTHD
+					  ,#{vrscEntrpsYn} 		AS VRSC_ENTRPS_YN
+					  ,#{mpbzYn} 			AS MPBZ_YN
+					  ,#{mpbzNumb} 			AS MPBZ_NUMB
+					  ,#{rprsntvJob} 		AS RPRSNTV_JOB
+					  ,#{di} 				AS DI
+					  ,#{gender} 			AS GENDER
+					  ,#{birthday} 			AS BIRTHDAY
+					  ,#{positionCd} 		AS POSITION_CD
+					  ,#{managerTelno} 		AS MANAGER_TELNO
+					  ,#{managerFaxno} 		AS MANAGER_FAXNO
+					  ,#{useYn} 			AS USE_YN					
+					  ,#{interestFieldCd} 	AS INTEREST_FIELD_CD
+					  ,#{interestFieldCd2} 	AS INTEREST_FIELD_CD2
+					  ,#{interestFieldCd3} 	AS INTEREST_FIELD_CD3
+					  ,#{jobCd} 			AS JOB_CD
+					  ,#{recommendTeam} 	AS RECOMMEND_TEAM	
+					  ,#{recommendNm} 		AS RECOMMEND_NM	
+					  ,#{detailAdres} 		AS DETAIL_ADRES	
+					  ,#{zip} 				AS ZIP
+					  ,#{role} 				AS ROLE	
+					  ,#{approveCd} 		AS APPROVE_CD
+					  ,#{approveDt} 		AS APPROVE_DT	
+					  ,#{registerId} 		AS REGISTER_ID
+					  ,#{registDt} 			AS REGIST_DT
+					  ,#{changerId} 		AS CHANGER_ID
+					  ,#{changeDt} 			AS CHANGE_DT
+				FROM DUAL
+				) S
+		ON (
+				T.MBER_NO = S.MBER_NO
+			)	 	
+		WHEN MATCHED THEN
+			 UPDATE
+		   		SET	 T.MBER_NM          = S.MBER_NM
+					,T.TELNO            = S.TELNO               
+					,T.EMAIL            = S.EMAIL               
+					,T.FAXNO            = S.FAXNO               
+					,T.ID               = S.ID                  
+					,T.PASSWORD         = S.PASSWORD            
+					,T.CSTMR_NO         = S.CSTMR_NO            
+					,T.MBER_SE_CD       = S.MBER_SE_CD          
+					,T.CRYAL_TELNO      = S.CRYAL_TELNO         
+					,T.DEPT_NM          = S.DEPT_NM                 
+					,T.DURS_NM          = S.DURS_NM                     
+					,T.BIZRNO_ATCH_ID   = S.BIZRNO_ATCH_ID      
+					,T.HFFCYN_ATCH_ID   = S.HFFCYN_ATCH_ID      
+					,T.CRTFC_RESULT     = S.CRTFC_RESULT         
+					,T.CRTFC_MTHD       = S.CRTFC_MTHD          
+					,T.VRSC_ENTRPS_YN   = S.VRSC_ENTRPS_YN      
+					,T.MPBZ_YN          = S.MPBZ_YN             
+					,T.MPBZ_NUMB        = S.MPBZ_NUMB           
+					,T.RPRSNTV_JOB      = S.RPRSNTV_JOB           
+					,T.DI               = S.DI   
+					,T.GENDER           = S.GENDER   
+					,T.BIRTHDAY         = S.BIRTHDAY   
+					,T.POSITION_CD    	= S.POSITION_CD 
+					,T.MANAGER_TELNO    = S.MANAGER_TELNO 
+					,T.MANAGER_FAXNO    = S.MANAGER_FAXNO 
+					,T.INTEREST_FIELD_CD	= S.INTEREST_FIELD_CD
+					,T.INTEREST_FIELD_CD2  = S.INTEREST_FIELD_CD2
+					,T.INTEREST_FIELD_CD3	= S.INTEREST_FIELD_CD3
+					,T.JOB_CD        	= S.JOB_CD
+					,T.RECOMMEND_TEAM	= S.RECOMMEND_TEAM 
+					,T.RECOMMEND_NM	    = S.RECOMMEND_NM 
+					,T.DETAIL_ADRES	    = S.DETAIL_ADRES 
+					,T.ZIP	   		    = S.ZIP 
+					,T.ROLE	    		= S.ROLE 
+					,T.APPROVE_CD	    = S.APPROVE_CD 
+					,T.APPROVE_DT	    = S.APPROVE_DT 
+					,T.CHANGER_ID       = S.CHANGER_ID          
+					,T.CHANGE_DT        = S.CHANGE_DT    
+		WHEN NOT MATCHED THEN
+			INSERT (
+					 T.MBER_NO             
+					,T.MBER_NM             
+					,T.TELNO               
+					,T.EMAIL               
+					,T.FAXNO               
+					,T.ID                  
+					,T.PASSWORD            
+					,T.CSTMR_NO            
+					,T.MBER_SE_CD          
+					,T.CRYAL_TELNO         
+					,T.DEPT_NM                 
+					,T.DURS_NM                
+					,T.BIZRNO_ATCH_ID      
+					,T.HFFCYN_ATCH_ID      
+					,T.CRTFC_RESULT        
+					,T.CRTFC_MTHD          
+					,T.VRSC_ENTRPS_YN      
+					,T.MPBZ_YN             
+					,T.MPBZ_NUMB           
+					,T.RPRSNTV_JOB       
+					,T.DI   
+					,T.GENDER   
+					,T.BIRTHDAY        
+					,T.POSITION_CD 
+					,T.MANAGER_TELNO
+					,T.MANAGER_FAXNO
+					,T.INTEREST_FIELD_CD
+					,T.INTEREST_FIELD_CD2
+					,T.INTEREST_FIELD_CD3
+					,T.JOB_CD	    
+					,T.RECOMMEND_TEAM	
+					,T.RECOMMEND_NM	   
+					,T.DETAIL_ADRES	  
+					,T.ZIP	  
+					,T.ROLE	    		
+					,T.APPROVE_CD 
+					,T.APPROVE_DT	 
+					,T.USE_YN				
+					,T.REGISTER_ID         
+					,T.REGIST_DT           
+					,T.CHANGER_ID          
+					,T.CHANGE_DT           
+					)		 
+			VALUES (
+					 S.MBER_NO             
+					,S.MBER_NM             
+					,S.TELNO               
+					,S.EMAIL               
+					,S.FAXNO               
+					,S.ID                  
+					,S.PASSWORD            
+					,S.CSTMR_NO            
+					,S.MBER_SE_CD          
+					,S.CRYAL_TELNO         
+					,S.DEPT_NM                    
+					,S.DURS_NM                   
+					,S.BIZRNO_ATCH_ID      
+					,S.HFFCYN_ATCH_ID      
+					,S.CRTFC_RESULT        
+					,S.CRTFC_MTHD          
+					,S.VRSC_ENTRPS_YN      
+					,S.MPBZ_YN             
+					,S.MPBZ_NUMB           
+					,S.RPRSNTV_JOB     
+					,S.DI   
+					,S.GENDER   
+					,S.BIRTHDAY
+					,S.POSITION_CD
+					,S.MANAGER_TELNO
+					,S.MANAGER_FAXNO
+					,S.INTEREST_FIELD_CD
+					,S.INTEREST_FIELD_CD2
+					,S.INTEREST_FIELD_CD3
+					,S.JOB_CD
+					,S.RECOMMEND_TEAM
+					,S.RECOMMEND_NM
+					,S.DETAIL_ADRES	  
+					,S.ZIP	  
+					,S.ROLE 
+					,S.APPROVE_CD
+					,SYSDATE 
+					,'Y'				
+					,S.REGISTER_ID         
+					,SYSDATE           
+					,S.CHANGER_ID          
+					,SYSDATE           
+					)	
+	</insert>
+	
+	<select id="selectCstmrNo" parameterType="map" resultType="CamelHashMap">
+	/* www.api.mba.auth.Auth.selectCstmer */
+		SELECT 'A'|| #{mberSeCd} || TO_CHAR(SYSDATE,'YYYYMMDD') || LPAD( CSTMR_NO_SEQ.NEXTVAL, 4 ,0) AS CSTMR_NO 
+		FROM DUAL
+	</select>
+	
+	<insert id="mergeCustomer" parameterType="map">
+	/* www.api.mba.auth.Auth.mergeCompany */
+		MERGE INTO OL_CU_TUBS001 T
+		USING (
+				SELECT
+					   #{mberNo}			AS MBER_NO
+					  ,#{nationCd} 			AS NATION_CD
+					  ,#{telno}  			AS TELNO
+					  ,#{detailAdres}  		AS DETAIL_ADRES
+					  ,#{zip}  				AS ZIP
+					  ,#{mpbzYn}  			AS MPBZ_YN
+					  ,#{mpbzSn} 			AS MPBZ_SN
+					  ,#{faxno} 			AS FAXNO
+					  ,#{sportHdqrDeptCd} 	AS SPORT_HDQR_DEPT_CD
+					  ,#{dmstcOvseaSeCd} 	AS DMSTC_OVSEA_SE_CD
+					  ,#{cstmrDelngSeCd} 	AS CSTMR_DELNG_SE_CD
+					  ,#{cstmrSeCd} 		AS CSTMR_SE_CD
+					  ,#{cstmrNo} 			AS CSTMR_NO			
+					  ,#{cstmrNm} 			AS CSTMR_NM		
+					  ,#{cstmrSttusCd} 		AS CSTMR_STTUS_CD
+					  ,#{registerId} 		AS REGISTER_ID
+					  ,#{registDt} 			AS REGIST_DT
+					  ,#{changerId} 		AS CHANGER_ID
+					  ,#{changeDt} 			AS CHANGE_DT
+				FROM DUAL
+				) S
+		ON (
+				T.CSTMR_NO = S.CSTMR_NO
+			)	 	
+		WHEN MATCHED THEN
+			 UPDATE
+		   		SET	 T.MBER_NO             = S.MBER_NO             
+					,T.NATION_CD           = S.NATION_CD               
+					,T.TELNO          	   = S.TELNO               
+					,T.DETAIL_ADRES        = S.DETAIL_ADRES               
+					,T.ZIP        		   = S.ZIP    
+					,T.MPBZ_YN             = S.MPBZ_YN                  
+					,T.MPBZ_SN       	   = S.MPBZ_SN            
+					,T.FAXNO       		   = S.FAXNO            
+					,T.SPORT_HDQR_DEPT_CD  = S.SPORT_HDQR_DEPT_CD
+					,T.DMSTC_OVSEA_SE_CD   = S.DMSTC_OVSEA_SE_CD
+					,T.CSTMR_DELNG_SE_CD   = S.CSTMR_DELNG_SE_CD
+					,T.CSTMR_SE_CD         = S.CSTMR_SE_CD                 
+					,T.CSTMR_NM       	   = S.CSTMR_NM             
+					,T.CSTMR_STTUS_CD      = S.CSTMR_STTUS_CD   
+					,T.CHANGER_ID    	   = S.CHANGER_ID
+					,T.CHANGE_DT      	   = S.CHANGE_DT    
+		WHEN NOT MATCHED THEN
+			INSERT (
+					 T.MBER_NO                       
+					,T.NATION_CD                     
+					,T.TELNO          	             
+					,T.DETAIL_ADRES            
+					,T.ZIP      
+					,T.MPBZ_YN                            
+					,T.MPBZ_SN       	          
+					,T.FAXNO       		            
+					,T.SPORT_HDQR_DEPT_CD      
+					,T.DMSTC_OVSEA_SE_CD        
+					,T.CSTMR_DELNG_SE_CD            
+					,T.CSTMR_SE_CD             
+					,T.CSTMR_NO       	     
+					,T.CSTMR_NM 
+					,T.CSTMR_STTUS_CD                 
+					,T.REGISTER_ID         
+					,T.REGIST_DT           
+					,T.CHANGER_ID          
+					,T.CHANGE_DT       	             
+					)		 
+			VALUES (
+					 S.MBER_NO
+					,S.NATION_CD
+					,S.TELNO
+					,S.DETAIL_ADRES
+					,S.ZIP
+					,S.MPBZ_YN
+					,S.MPBZ_SN
+					,S.FAXNO
+					,S.SPORT_HDQR_DEPT_CD
+					,S.DMSTC_OVSEA_SE_CD
+					,S.CSTMR_DELNG_SE_CD
+					,S.CSTMR_SE_CD
+					,S.CSTMR_NO
+					,S.CSTMR_NM
+					,S.CSTMR_STTUS_CD       
+					,S.REGISTER_ID
+					,SYSDATE
+					,S.CHANGER_ID
+					,SYSDATE
+					)	
+	</insert>
+	
+
+	
+	<insert id="mergeCustomerCompany" parameterType="map">
+	/* www.api.mba.auth.Auth.mergeCustomerCompany */
+		MERGE INTO OL_CU_TUBS002 T
+		USING (
+				SELECT
+				       #{bsnmCstmrNo} 		AS BSNM_CSTMR_NO
+					  ,#{bizrno}  			AS BIZRNO
+					  ,#{rprsntvNm}			AS RPRSNTV_NM
+					  ,#{bizcndCd} 			AS BIZCND_CD
+					  ,#{indutyCd}  		AS INDUTY_CD
+					  ,#{zrpctaxBsnmYn}  	AS ZRPCTAX_BSNM_YN
+					  ,#{registerId} 		AS REGISTER_ID
+					  ,#{registDt} 			AS REGIST_DT
+					  ,#{changerId} 		AS CHANGER_ID
+					  ,#{changeDt} 			AS CHANGE_DT
+				FROM DUAL
+				) S
+		ON (
+				T.BSNM_CSTMR_NO = S.BSNM_CSTMR_NO
+			)
+		WHEN MATCHED THEN
+			 UPDATE
+		   		SET	 T.BIZRNO              = S.BIZRNO
+					,T.RPRSNTV_NM          = S.RPRSNTV_NM
+					,T.BIZCND_CD           = S.BIZCND_CD
+					,T.INDUTY_CD       	   = S.INDUTY_CD
+					,T.ZRPCTAX_BSNM_YN     = S.ZRPCTAX_BSNM_YN
+					,T.CHANGER_ID    	   = S.CHANGER_ID
+					,T.CHANGE_DT      	   = S.CHANGE_DT    
+		WHEN NOT MATCHED THEN
+			INSERT (
+					T.BSNM_CSTMR_NO
+					,T.BIZRNO
+					,T.RPRSNTV_NM
+					,T.BIZCND_CD              
+					,T.INDUTY_CD
+					,T.ZRPCTAX_BSNM_YN
+					,T.REGISTER_ID
+					,T.REGIST_DT
+					,T.CHANGER_ID
+					,T.CHANGE_DT
+					)		 
+			VALUES (
+					S.BSNM_CSTMR_NO           
+					,S.BIZRNO                 
+					,S.RPRSNTV_NM                 
+					,S.BIZCND_CD                                     
+					,S.INDUTY_CD             
+					,S.ZRPCTAX_BSNM_YN                     
+					,S.REGISTER_ID
+					,SYSDATE
+					,S.CHANGER_ID
+					,SYSDATE
+					)	
+	</insert>
+	
+	
+	<insert id="mergeCustomerDetail" parameterType="map">
+	/* www.api.mba.auth.Auth.mergeCustomerDetail */
+		MERGE INTO OL_CU_TUBS003 T
+		USING (
+				SELECT
+				       #{indvdlCstmrNo} 	AS INDVDL_CSTMR_NO
+					  ,#{ihidnum}  			AS IHIDNUM
+					  ,#{cryalTelno}		AS CRYAL_TELNO 
+					  ,#{email} 			AS EMAIL
+					  ,#{occpSe}  			AS OCCP_SE
+					  ,#{registerId} 		AS REGISTER_ID
+					  ,#{registDt} 			AS REGIST_DT
+					  ,#{changerId} 		AS CHANGER_ID
+					  ,#{changeDt} 			AS CHANGE_DT
+				FROM DUAL
+				) S
+		ON (
+				T.INDVDL_CSTMR_NO = S.INDVDL_CSTMR_NO
+			)
+		WHEN MATCHED THEN
+			 UPDATE
+		   		SET	 T.IHIDNUM             = S.IHIDNUM
+					,T.CRYAL_TELNO         = S.CRYAL_TELNO
+					,T.EMAIL       	       = S.EMAIL
+					,T.OCCP_SE     		   = S.OCCP_SE
+					,T.CHANGER_ID    	   = S.CHANGER_ID
+					,T.CHANGE_DT      	   = S.CHANGE_DT
+		WHEN NOT MATCHED THEN
+			INSERT (
+					T.INDVDL_CSTMR_NO
+					,T.IHIDNUM
+					,T.CRYAL_TELNO
+					,T.EMAIL              
+					,T.OCCP_SE
+					,T.REGISTER_ID
+					,T.REGIST_DT
+					,T.CHANGER_ID
+					,T.CHANGE_DT
+					)		 
+			VALUES (
+					S.INDVDL_CSTMR_NO
+					,S.IHIDNUM
+					,S.CRYAL_TELNO
+					,S.EMAIL              
+					,S.OCCP_SE                 
+					,S.REGISTER_ID
+					,SYSDATE
+					,S.CHANGER_ID
+					,SYSDATE
+					)	
+	</insert>
+	
+    <!-- 회원가입 -->
+    <insert id="insertMember" parameterType="map">
+   	/* www.api.mba.auth.Auth.insertMember */
+	   <selectKey keyProperty="mberNo" resultType="int" order="BEFORE">
+	        SELECT IFNULL(MAX(MBER_NO),0) + 1 FROM member
+	    </selectKey>
+		  INSERT INTO member (
+		    MBER_NO, MBER_ID, MBER_PW, MBER_NM, EMAIL, PHONE, TYPE, GRADE,
+		    REGISTER_ID, REGIST_DT, CHANGER_ID, CHANGER_DT, TOKEN,
+		    PUSH_TYPE, ROLE, USE_YN
+		  )
+		  VALUES (
+		      #{mberNo}, #{mberId}, #{mberPw}, #{mberNm}, #{email}, #{phone}, #{type}, #{grade},
+		      #{registerId}, NOW(), #{changerId}, NOW(), #{token},
+		      #{pushType}, #{role}, #{useYn}  
+		  )
+    </insert>
+
+    <!-- 로그인 -->
+    <select id="selectLogin" parameterType="map" resultType="CamelHashMap">
+    /* www.api.mba.auth.Auth.selectLogin */
+		SELECT
+		    MBER_NO
+		    ,MBER_ID
+		    ,MBER_PW
+		    ,MBER_NM
+		    ,EMAIL
+		    ,PHONE
+		    ,TYPE
+		    ,GRADE
+		    ,REGISTER_ID
+		    ,REGIST_DT
+		    ,CHANGER_ID
+		    ,CHANGER_DT
+		    ,TOKEN
+		    ,PUSH_TYPE
+		    ,ROLE
+		    ,USE_YN
+		  FROM member
+		  WHERE MBER_ID = #{mberId}
+		    AND MBER_PW = #{mberPw} 
+		    AND USE_YN = 'Y' 
+    </select>
+
+    <!-- 아이디비밀번호찾기 -->
+    <select id="selectIdPwFind" parameterType="map" resultType="CamelHashMap">
+    /* www.api.mba.auth.Auth.selectIdPwFind */
+		SELECT *
+        FROM CU_TUPR001
+        WHERE 1 = 1x
+    </select>
+    
+    <!-- 아이디 중복체크 -->
+    <select id="duplicateId" parameterType="map" resultType="CamelHashMap">
+    /* www.api.mba.auth.Auth.duplicateId */
+		SELECT COUNT(*) as cnt
+		FROM OL_CU_TUPR001
+		WHERE ID = #{id}
+    </select>  
+    
+    <!-- 아이디 중복체크 -->
+    <select id="findId" parameterType="map" resultType="CamelHashMap">
+    /* www.api.mba.auth.Auth.findId */
+		SELECT ID
+		FROM OL_CU_TUPR001
+		WHERE MBER_NM = #{mberNm}
+		AND CRYAL_TELNO = #{cryalTelno}
+		AND ROWNUM = 1
+    </select>
+    
+    <!-- 비밀번호 변경 -->
+	<update id="changePassword" parameterType="map">
+	/* www.api.mba.auth.Auth.changePassword */
+		UPDATE OL_CU_TUPR001
+		SET PASSWORD = #{password}
+		WHERE MBER_NO = #{mberNo}
+	</update>
+    
+    <!-- DI값 체크 -->
+    <select id="checkDi" parameterType="map" resultType="CamelHashMap">
+    /* www.api.mba.auth.Auth.checkDi */
+		SELECT MBER_NO
+		FROM OL_CU_TUPR001
+		WHERE DI = #{di}
+		AND ROWNUM = 1
+    </select>
+    
+        
+    <!-- 사업자등록번호 체크 -->
+    <select id="checkBizrno" parameterType="map" resultType="CamelHashMap">
+    /* www.api.mba.auth.Auth.checkBizrno */
+		SELECT BIZRNO
+		FROM OL_CU_TUBS002
+		WHERE BIZRNO = #{bizrno}
+		AND ROWNUM = 1
+    </select>
+    
+    <select id="selectCompanyList" parameterType="map" resultType="CamelHashMap">
+    /* www.api.mba.auth.Auth.selectCompanyList */
+		SELECT  T.MBER_NO
+				,T.NATION_CD
+				,T.TELNO
+				,T.DETAIL_ADRES
+				,T.MPBZ_YN
+				,T.MPBZ_SN       	          
+				,T.FAXNO       		            
+				,T.SPORT_HDQR_DEPT_CD      
+				,T.DMSTC_OVSEA_SE_CD        
+				,T.CSTMR_DELNG_SE_CD             
+				,T.CSTMR_SE_CD             
+				,T.CSTMR_NO       	     
+				,T.CSTMR_NM 
+				,T.CSTMR_STTUS_CD                 
+				,S.BIZRNO
+				,S.RPRSNTV_NM
+				,T.REGISTER_ID         
+				,T.REGIST_DT           
+				,T.CHANGER_ID          
+				,T.CHANGE_DT 
+		FROM OL_CU_TUBS001 T
+		INNER JOIN OL_CU_TUBS002 S ON T.CSTMR_NO  = S.BSNM_CSTMR_NO
+		<where>
+			<if test='searchField != null and searchField != "" and searchText != null and searchText != "" '>
+				<choose>
+				    <when test='searchField == "cstmrNm" '>
+				        AND T.CSTMR_NM LIKE '%' || #{searchText} || '%'
+				    </when>
+				    <when test='searchField == "bizrno" '>
+				        AND S.BIZRNO LIKE '%' || #{searchText} || '%'
+				    </when>
+				    <otherwise>
+				    </otherwise>
+				</choose>
+			</if>
+		</where>
+     </select>
+
+</mapper>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="www.api.com.edoc.Edoc">
+
+    <!-- 전자문서저장 -->
+    <insert id="insertDocMT" parameterType="map">
+        INSERT /* www.api.com.edoc.Edoc.insertDocMT */
+          INTO OL_CO_DOC_MT                                                               /*  */
+             (
+             )
+        VALUES
+             (
+             )
+    </insert>
+
+    <!-- 전자문서저장 -->
+    <insert id="insertDocDT" parameterType="map">
+        INSERT /* www.api.com.edoc.Edoc.insertDocDT */
+          INTO OL_CO_DOC_DT                                                               /*  */
+             (
+             )
+        VALUES
+             (
+             )
+    </insert>
+
+    <!-- 템플릿조회 -->
+    <select id="selectTemplate" parameterType="map" resultType="map">
+        /************************************ 페이징 처리 시 쿼리(골라쓰세용, 고르신 후 주석은 삭제 부탁드립니다.) 명확한 조건절은 if test= 를 삭제해주세요. 잘못하면 왕창 나와버림 가급적 명확한게 좋겠죠 ***********************************/
+        SELECT /* www.api.com.edoc.Edoc.selectTemplate */
+               TOTAL                                                                      /* 총 건수  */
+          FROM ( SELECT
+                        COUNT(*) OVER () AS TOTAL
+                   FROM TM_CODEXH EXH                                                     /*  */
+                  WHERE 1 = 1
+               )
+        <if test='SS_FIRST_INDEX != null and SS_RECORD_COUNT != null'>
+            OFFSET #{SS_FIRST_INDEX} ROWS FETCH NEXT #{SS_RECORD_COUNT} ROW ONLY
+        </if>
+
+        /*********************************** 일반적인 쿼리 사용 시(골라쓰세용, 고르신 후 주석은 삭제 부탁드립니다.)  명확한 조건절은 if test= 를 삭제해주세요. 잘못하면 왕창 나와버림 가급적 명확한게 좋겠죠 ***********************************/
+        SELECT /* www.api.com.edoc.Edoc.selectTemplate */
+          FROM TM_CODEXH EXH                                                              /*  */
+         WHERE 1 = 1
+    </select>
+
+</mapper>

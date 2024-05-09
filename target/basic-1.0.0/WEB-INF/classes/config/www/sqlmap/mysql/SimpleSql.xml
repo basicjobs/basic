@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="www.api.smp.simple.Simple">
+   	<select id="getSimpleList"  parameterType="map" resultType="CamelHashMap">
+		SELECT SIMPLE_IDX
+			,TITLE
+			,CHECK_YN
+			,SIMPLE_DATE
+			,CREATE_USER
+			,CREATE_DATE
+			,UPDATE_USER
+			,UPDATE_DATE
+		FROM simple
+        <where>
+            <!-- 
+                <if test='id != null and id != "" '>
+                </if>
+            -->
+			<if test='simpleDate != null and simpleDate != "" '>
+				AND SIMPLE_DATE = #{simpleDate}
+			</if>
+			<if test='createUser != null and createUser != "" '>
+				AND CREATE_USER = #{createUser}
+			</if>
+        </where>
+        ORDER BY 
+            SIMPLE_IDX DESC
+	</select>
+	
+	<select id="getApiSimpleListCount"  parameterType="map" resultType="CamelHashMap">
+        SELECT
+            COUNT(*) CNT
+        FROM simple
+	</select>
+	
+	<select id="getApiSimple"  parameterType="map" resultType="CamelHashMap">
+        SELECT
+            SIMPLE_IDX
+			,TITLE
+			,CHECK_YN
+			,SIMPLE_DATE
+			,CREATE_USER
+			,CREATE_DATE
+			,UPDATE_USER
+			,UPDATE_DATE
+
+        FROM simple
+        WHERE SIMPLE_IDX = #{simpleIdx}
+	</select>
+	
+	<insert id="insertSimple" parameterType="map">
+		INSERT INTO SIMPLE
+		(
+            TITLE
+			,CHECK_YN
+			,SIMPLE_DATE
+			,CREATE_USER
+			,CREATE_DATE
+			,UPDATE_USER
+			,UPDATE_DATE
+
+		)
+		VALUES
+		(
+			#{title}
+			,#{checkYn}
+			,now()
+			,#{createUser}
+			,now()
+			,#{updateUser}
+			,now()
+
+		)
+	</insert>
+	
+	<update id="updateSimple" parameterType="map">
+		UPDATE SIMPLE
+		<set>
+			<if test='title != null and title != "" '>
+				TITLE = #{title},
+			</if>
+			<if test='checkYn != null and checkYn != "" '>
+				CHECK_YN = #{checkYn},
+			</if>
+			<if test='simpleDate != null and simpleDate != "" '>
+				SIMPLE_DATE = #{simpleDate},
+			</if>
+			<if test='createUser != null and createUser != "" '>
+				CREATE_USER = #{createUser},
+			</if>
+			<if test='createDate != null and createDate != "" '>
+				CREATE_DATE = #{createDate},
+			</if>
+			<if test='updateUser != null and updateUser != "" '>
+				UPDATE_USER = #{updateUser},
+			</if>
+			<if test='updateDate != null and updateDate != "" '>
+				UPDATE_DATE = #{updateDate}
+			</if>
+
+		</set>
+		WHERE SIMPLE_IDX = #{simpleIdx}
+	</update>
+	
+	<delete id="deleteSimple" parameterType="map">
+		DELETE FROM SIMPLE
+        WHERE SIMPLE_IDX = #{simpleIdx}
+	</delete>
+</mapper>

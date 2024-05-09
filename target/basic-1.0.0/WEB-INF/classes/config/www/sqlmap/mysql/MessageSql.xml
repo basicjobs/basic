@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="www.api.com.message.Message">
+	
+    <!-- 회원가입 -->
+    <insert id="insertAuthCd" parameterType="map">
+   	/* www.api.com.message.Message.insertAuthCd */
+	   <selectKey keyProperty="authNo" resultType="int" order="BEFORE">
+	        SELECT NVL(MAX(TO_NUMBER(AUTH_NO)),0) + 1 FROM OL_CO_AUTH
+	    </selectKey>
+		INSERT INTO OL_CO_AUTH
+			(AUTH_NO
+			,DEST_PHONE
+		    ,AUTH_CD
+		    ,AUTH_TYPE
+		    ,GENERATE_TIME) 
+		VALUES
+		    (#{authNo}
+			,#{destPhone}
+		    ,#{authCd}
+		    ,#{authType}
+		    ,SYSDATE)
+    </insert>
+
+    <!-- 로그인 -->
+    <select id="checkAuthCd" parameterType="map" resultType="CamelHashMap">
+    /* www.api.com.message.Message.checkAuthCd */
+		SELECT AUTH_NO
+		      ,DEST_PHONE
+        FROM OL_CO_AUTH
+        WHERE 1 = 1
+        AND DEST_PHONE = #{destPhone}
+        AND AUTH_CD = #{authCd}
+        AND TO_CHAR(GENERATE_TIME, 'YYYYMMDD HH24:MI:SS') > TO_CHAR(SYSDATE-1/24/20, 'YYYYMMDD HH24:MI:SS')
+    </select>
+    
+    <insert id="insertBizMsg" parameterType="map">
+    /* www.api.com.message.Message.insertBizMsg */
+    INSERT INTO BIZ_MSG (MSG_TYPE				/* 발송타입(알림톡:6) */
+                          , CMID				/* PK */
+                          , REQUEST_TIME		/* 등록 시간 */
+                          , SEND_TIME			/* 발송기준 시간 */
+                          , DEST_PHONE			/* 수신번호 */
+                          , DEST_NAME
+                          , SEND_PHONE			/* 발신번호 */
+                          , SEND_NAME
+                          , MSG_BODY			/* 메시지 내용 */
+                          , TEMPLATE_CODE		/* 템플릿코드 */
+                          , SENDER_KEY			/* 발신프로필키 */
+                          , NATION_CODE		/* 국가코드 */
+                          /*, TIMEOUT */		/* 대체발송을 위한 타임아웃 시간설정 */
+                          , SMS_FLAG			/* 알림톡 발송 실패 시 문자메시지로 전송 여부 */
+                          , RE_TYPE			/* 대체발송 메시지 타입 */
+                          , RE_BODY)	    	/* 대체발송 메시지 내용 */
+			VALUES (6																		/* 발송타입(알림톡:6) */
+			      , #{emplNumb} || TO_CHAR(SYSTIMESTAMP, 'yyyymmddHH24MISSFF')				/* PK */
+			      , SYSDATE																	/* 등록 시간 */
+			      , SYSDATE																	/* 발송기준 시간 */
+			      , #{destPhone}															/* 수신번호 */
+			      , SUBSTR(#{destName},1,10)
+			      , #{sendPhone}															/* 발신번호 */
+			      , #{emplNumb}
+			      , #{msgBody}																/* 메시지 내용 */
+			      , #{templateCode}			  												/* 템플릿코드 */
+			      , '55aa26b158be54328ca5788611fe7d58c467ef00'								/* 발신프로필키 */
+			      , '82'																	/* 국가코드 */
+			      /*, 3 */																	/* 대체발송을 위한 타임아웃 시간설정 */
+			      , 1																		/* 알림톡 발송 실패 시 문자메시지로 전송 여부 */
+			      , #{msgType}																/* 대체발송 메시지 타입 : SMS, MMS(80자 초과) */
+			      , #{msgBody}	)
+	 </insert>
+	 
+	 <insert id="insertMailLog">
+        /* www.api.com.message.Message.insertMailLog */
+	   <selectKey keyProperty="mailNo" resultType="int" order="BEFORE">
+	        SELECT NVL(MAX(TO_NUMBER(MAIL_NO)),0) + 1 FROM OL_MAIL_LOG 
+	    </selectKey>
+		INSERT INTO OL_MAIL_LOG
+		(
+			MAIL_NO
+			,TITLE
+			,CONTENT
+			,MAIL_FROM
+			,MAIL_TO
+			,MAIL_CC
+			,MAIL_BCC
+			,MAIL_CD
+			,SEND_YN
+			,REGIST_DT
+
+		)
+		VALUES 
+		(	#{mailNo}													
+	      , #{title}													
+	      , #{content}
+	      , #{mailFrom}													
+	      , #{mailTo}		
+	      , #{mailCc}		  																									/* 알림톡 발송 실패 시 문자메시지로 전송 여부 */
+	      , #{mailBcc}															
+	      , #{mailCd}
+	      , #{sendYn}
+	      , SYSDATE
+	    )
+	</insert>
+</mapper>

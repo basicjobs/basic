@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="www.api.csv.customer.Customer">
+	<select id="selectNoticeList" parameterType="map" resultType="CamelHashMap">
+    	SELECT *
+				FROM(SELECT 
+	            ROW_NUMBER() OVER(ORDER BY T.SRAL_NUMB DESC) AS RN,
+	            ROWNUM AS RNUM,
+				COUNT(*) OVER() AS TOT_CNT,
+	 			T.*
+	         FROM (
+	            SELECT
+					 A.SRAL_NUMB,
+					 A.BOARD_CODE,
+					 A.NTCE_SBJT,
+					 A.BULT_CNTT,
+					 A.POPD_BEDE,
+					 A.POPD_ENDD,
+					 A.POPT_NAME,
+					 A.FILE_IDXX,
+					 A.BOARD_WRITER,
+					 A.VIEW_CNT,
+					 A.INST_USID,
+					 A.INST_DATE,
+					 A.UPDT_USID,
+					 A.UPDT_DATE
+	             FROM
+	                BOARDS A
+	            WHERE 1=1
+	            <if test='searchField != null and searchField != "" and searchText != null and searchText != "" '>
+					<choose>
+					    <when test='searchField == "ntceSbjt" '>
+					        AND A.NTCE_SBJT LIKE '%' || #{searchText} || '%'
+					    </when>
+					    <when test='searchField == "bultCntt" '>
+					        AND A.BULT_CNTT LIKE '%' || #{searchText} || '%'
+					    </when>
+					    <when test='searchField == "boardWriter" '>
+					        AND A.BOARD_WRITER LIKE '%' || #{searchText} || '%'
+					    </when>
+					    <otherwise>
+					    </otherwise>
+					</choose>
+				</if>
+	            
+	            AND A.BOARD_CODE='NOTI'
+				ORDER BY A.SRAL_NUMB ASC
+	         ) T
+         )
+         WHERE RN BETWEEN (#{page}-1) * #{pageSize} + 1 AND (#{page}-1) * #{pageSize} + #{pageSize}
+         ORDER BY 1
+    </select>
+    
+    <insert id="insertNotice" parameterType="map">
+    	<![CDATA[
+    		INSERT INTO BOARDS
+    		(	SRAL_NUMB,
+	    		BOARD_CODE,
+	    		NTCE_SBJT,
+	    		BULT_CNTT,
+				POPD_BEDE,
+				POPD_ENDD,
+				POPT_NAME,
+				FILE_IDXX,
+				BOARD_WRITER,
+				INST_USID,
+				INST_DATE,
+				UPDT_USID,
+				UPDT_DATE
+    		)
+    		VALUES
+	    	(	EV_SRAL_NUMB.NEXTVAL,
+	    		'NOTI',
+	    		#{ntceSbjt},
+	    		#{bultCntt},
+				#{popdBede},
+				#{popdEndd},
+				#{poptCode},
+				#{fileIdxx},
+				#{boardWriter},
+				#{instUsid},
+				SYSDATE,
+				#{updtUsid},
+	    		SYSDATE
+    		)
+    	]]>
+    </insert>
+    
+    <update id="updateNoticeViewCnt" parameterType="map">
+    	UPDATE BOARDS
+    		SET VIEW_CNT = VIEW_CNT+1
+    		WHERE SRAL_NUMB = #{evSralNumb}
+    </update>
+
+	<update id="updateNotice" parameterType="map">
+		<![CDATA[
+			UPDATE BOARDS
+			SET
+				NTCE_SBJT = #{ntceSbjt},
+				BULT_CNTT = #{bultCntt},
+				POPD_BEDE = #{popdBede},
+				POPD_ENDD = #{popdEndd},
+				POPT_NAME = #{poptCode},
+				FILE_IDXX = #{fileIdxx},
+				BOARD_WRITER = #{boardWriter},
+				INST_USID = #{instUsid},
+				UPDT_USID = #{updtUsid},
+				UPDT_DATE = SYSDATE,
+			WHERE EV_SRAL_NUMB = #{evSralNumb}
+		]]>
+	</update>
+	
+	<delete id="deleteNotice" parameterType="map">
+		<![CDATA[
+			DELETE BOARDS
+			WHERE EV_SRAL_NUMB = #{evSralNumb}
+		]]>
+	</delete>
+	
+	<select id="selectNotice" parameterType="map" resultType="CamelHashMap">
+		<![CDATA[
+            SELECT
+                 T.SRAL_NUMB,
+				 T.BOARD_CODE,
+				 T.NTCE_SBJT,
+				 T.BULT_CNTT,
+				 T.POPD_BEDE,
+				 T.POPD_ENDD,
+				 T.POPT_NAME,
+				 T.FILE_IDXX,
+				 T.BOARD_WRITER,
+				 T.VIEW_CNT,
+				 T.INST_USID,
+				 T.INST_DATE,
+				 T.UPDT_USID,
+				 T.UPDT_DATE
+             FROM
+                BOARDS T
+            WHERE   T.SRAL_NUMB = #{evSralNumb}
+			AND   T.BOARD_CODE='NOTI'
+		]]>
+	</select>
+	
+	<select id="selectFaqList" parameterType="map" resultType="CamelHashMap">
+    	<![CDATA[
+    		SELECT *
+				FROM(SELECT 
+	            ROW_NUMBER() OVER(ORDER BY T.SRAL_NUMB DESC) AS RN,
+	            ROWNUM AS RNUM,
+				COUNT(*) OVER() AS TOTCNT,
+	 			T.*
+	         FROM (
+	            SELECT
+					 A.SRAL_NUMB,
+					 A.BOARD_CODE,
+					 A.NTCE_SBJT,
+					 A.BULT_CNTT,
+					 A.POPD_BEDE,
+					 A.POPD_ENDD,
+					 A.POPT_NAME,
+					 A.FILE_IDXX,
+					 A.BOARD_WRITER,
+					 A.VIEW_CNT,
+					 A.INST_USID,
+					 A.INST_DATE,
+					 A.UPDT_USID,
+					 A.UPDT_DATE
+	             FROM
+	                BOARDS A
+	            WHERE   A.NTCE_SBJT LIKE '%' || #{ntceSbjt} || '%' 
+	            AND   A.BULT_CNTT LIKE '%' || #{bultCntt} || '%'
+	            AND   A.POPT_NAME LIKE '%' || #{poptCode} || '%'
+				AND   A.BOARD_CODE='FAQ'
+				ORDER BY A.SRAL_NUMB ASC
+	         ) T
+         )
+         WHERE RN BETWEEN #{rowStart} AND #{rowEnd}
+    	]]>
+    </select>
+    
+    <insert id="insertFaq" parameterType="map">
+    	<![CDATA[
+    		INSERT INTO BOARDS
+    		(	SRAL_NUMB,
+	    		BOARD_CODE,
+	    		NTCE_SBJT,
+	    		BULT_CNTT,
+				POPD_BEDE,
+				POPD_ENDD,
+				POPT_NAME,
+				FILE_IDXX,
+				BOARD_WRITER,
+				INST_USID,
+				INST_DATE,
+				UPDT_USID,
+				UPDT_DATE
+    		)
+    		VALUES
+	    	(	EV_SRAL_NUMB.NEXTVAL,
+	    		'FAQ',
+	    		#{ntceSbjt},
+	    		#{bultCntt},
+				#{popdBede},
+				#{popdEndd},
+				#{poptCode},
+				#{fileIdxx},
+				#{boardWriter},
+				#{instUsid},
+				SYSDATE,
+				#{updtUsid},
+	    		SYSDATE
+    		)
+    	]]>
+    </insert>
+
+	<update id="updateFaq" parameterType="map">
+		<![CDATA[
+			UPDATE BOARDS
+			SET
+				NTCE_SBJT = #{ntceSbjt},
+				BULT_CNTT = #{bultCntt},
+				POPD_BEDE = #{popdBede},
+				POPD_ENDD = #{popdEndd},
+				POPT_NAME = #{poptCode},
+				FILE_IDXX = #{fileIdxx},
+				BOARD_WRITER = #{boardWriter},
+				INST_USID = #{instUsid},
+				UPDT_USID = #{updtUsid},
+				UPDT_DATE = SYSDATE,
+			WHERE EV_SRAL_NUMB = #{evSralNumb}
+		]]>
+	</update>
+	
+	<update id="deleteFaq" parameterType="map">
+		<![CDATA[
+			DELETE BOARDS
+			WHERE EV_SRAL_NUMB = #{evSralNumb}
+		]]>
+	</update>
+	
+	<select id="selectFaq" parameterType="map" resultType="CamelHashMap">
+		<![CDATA[
+			SELECT
+                 T.SRAL_NUMB,
+				 T.BOARD_CODE,
+				 T.NTCE_SBJT,
+				 T.BULT_CNTT,
+				 T.POPD_BEDE,
+				 T.POPD_ENDD,
+				 T.POPT_NAME,
+				 T.FILE_IDXX,
+				 T.BOARD_WRITER,
+				 T.VIEW_CNT,
+				 T.INST_USID,
+				 T.INST_DATE,
+				 T.UPDT_USID,
+				 T.UPDT_DATE
+             FROM
+                BOARDS T
+            WHERE   T.SRAL_NUMB = #{evSralNumb}
+			AND   T.BOARD_CODE='FAQ'
+		]]>
+	</select>
+
+</mapper>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="www.api.com.attach.Attach">
+	<!-- 공통첨부파일 첨부파일 조회 -->
+   <select id="selectAttachFileList" parameterType="map" resultType="CamelHashMap">
+      SELECT /* selectAttachFileList [공통]첨부파일 조회 */
+        	   '0' AS CHK
+        	  ,FILE_IDXX  /* 파일ID */
+              ,PFIL_NAME  /* 물리파일명 */
+              ,LFIL_NAME  /* 논리파일명 */
+              ,FILE_SIZE  /* 파일크기 */
+              ,EXTN_NAME  /* 확장자명 */ 
+              ,REMK_200X  /* 비고200 */
+              ,SYST_CODE  /* 시스템코드 */
+              ,MENU_IDXX  /* 메뉴ID */
+              ,FILE_PATH  /* 파일경로 */
+              ,FITY_CODE  /* 파일유형코드[FITY_CODE] */
+              ,FPTY_CODE  /* 경로유형코드[FPTY_CODE] */
+              ,INST_USID  /* 입력작업자 */ 
+              ,INST_DATE  /* 입력일시 */
+              ,UPDT_USID  /* 수정작업자 */
+              ,UPDT_DATE  /* 수정일시 */
+              ,REMK_ENGL  /* 영문비고 */
+              ,FILE_SEQN  /* 파일순번 */
+              ,ATTACH_CODE /*20210406 해외지사 실적으로 인한 첨부 구분 추가 한희석*/ 
+          FROM AFILED  /* [첨부파일상세] */
+         WHERE FILE_IDXX = #{fileIdxx}
+         ORDER BY FILE_SEQN
+   </select>
+   
+   <!-- 공통첨부파일 첨부파일 상세테이블 조회 -->
+   <select id="selectAttachFile" parameterType="map" resultType="CamelHashMap">
+      SELECT /* selectAttachFile [공통] 첨부파일 상세테이블 조회 */
+        	   FILE_IDXX  /* 파일ID */
+              ,PFIL_NAME  /* 물리파일명 */
+              ,LFIL_NAME  /* 논리파일명 */
+              ,FILE_SIZE  /* 파일크기 */
+              ,EXTN_NAME  /* 확장자명 */ 
+              ,REMK_200X  /* 비고200 */
+              ,SYST_CODE  /* 시스템코드 */
+              ,MENU_IDXX  /* 메뉴ID */
+              ,FILE_PATH  /* 파일경로 */
+              ,FITY_CODE  /* 파일유형코드[FITY_CODE] */
+              ,FPTY_CODE  /* 경로유형코드[FPTY_CODE] */
+              ,INST_USID  /* 입력작업자 */ 
+              ,INST_DATE  /* 입력일시 */
+              ,UPDT_USID  /* 수정작업자 */
+              ,UPDT_DATE  /* 수정일시 */
+              ,REMK_ENGL  /* 영문비고 */
+              ,FILE_SEQN  /* 파일순번 */
+              ,ATTACH_CODE /*20210406 해외지사 실적으로 인한 첨부 구분 추가 한희석*/
+          FROM AFILED A    /* [첨부파일상세] */
+         WHERE FILE_IDXX = #{fileIdxx}
+           AND PFIL_NAME = #{pfilName}
+   </select>
+   
+   <!-- 공통첨부파일 첨부파일 상세테이블 저장 -->
+   <insert id="insertAttachFile" parameterType="map">
+            INSERT INTO AFILED ( /* insertAttachFile [공통] 첨부파일 상세테이블 저장 */
+             FILE_IDXX  /* 파일ID */
+            ,PFIL_NAME  /* 물리파일명 */
+            ,LFIL_NAME  /* 논리파일명 */
+            ,FILE_SIZE  /* 파일크기 */
+            ,EXTN_NAME  /* 확장자명 */ 
+            ,REMK_200X  /* 비고200 */
+            ,SYST_CODE  /* 시스템코드 */
+            ,MENU_IDXX  /* 메뉴ID */
+            ,FILE_PATH  /* 파일경로 */
+            ,FITY_CODE  /* 파일유형코드[FITY_CODE] */
+            ,FPTY_CODE  /* 경로유형코드[FPTY_CODE] */
+            ,INST_USID  /* 입력작업자 */ 
+            ,INST_DATE  /* 입력일시 */
+            ,UPDT_USID  /* 수정작업자 */
+            ,UPDT_DATE  /* 수정일시 */
+            ,REMK_ENGL  /* 영문비고 */
+            ,FILE_SEQN  /* 파일순번 */
+            ,ATTACH_CODE /*첨부 구분*/
+         ) VALUES (
+             #{fileIdxx}
+            ,#{pfilName}
+            ,#{lfilName}
+            ,#{fileSize}
+            ,#{extnName}
+            ,#{remk200x}
+            ,#{systCode}
+            ,#{menuIdxx}
+            ,#{filePath}
+            ,#{fityCode}
+            ,#{fptyCode}
+            ,#{updtUsid}
+            ,NOW()
+            ,#{updtUsid} 
+            ,NOW()
+            ,#{remkEngl}
+            ,0
+			,#{attachCode} 
+        )
+   </insert>
+   
+   <!-- 공통첨부파일 첨부파일 상세테이블 수정 -->
+   <update id="updateAttachFile" parameterType="java.util.Map">
+      UPDATE AFILED /* updateAttachFile [공통] 첨부파일 상세테이블 수정*/
+           SET LFIL_NAME = #{lfilName}    /*논리파일명*/
+              ,FILE_SIZE = #{fileSize}    /*파일크기*/
+              ,EXTN_NAME = #{extnName}    /*확장자명*/
+              ,REMK_200X = #{remk200x}    /*비고200*/
+              ,SYST_CODE = #{systCode}    /*시스템코드*/
+              ,MENU_IDXX = #{menuIdxx}    /*메뉴ID*/
+              ,FILE_PATH = #{filePath}    /*파일경로*/
+              ,FITY_CODE = #{fityCode}    /*파일유형코드[FITY_CODE]*/
+              ,FPTY_CODE = #{fptyCode}    /* 경로유형코드[FPTY_CODE] */
+              ,UPDT_USID = #{updtUsid}    /*수정작업자*/
+              ,UPDT_DATE=NOW()          /*수정일시*/
+              ,REMK_ENGL=  #{remkEngl}    /* 영문비고 */
+              ,FILE_SEQN=  #{fileSeqn}    /* 파일순번 */
+              ,ATTACH_CODE=#{attachCode} /*20210406 해외지사 실적으로 인한 첨부 구분 추가 한희석*/	
+         WHERE FILE_IDXX = #{fileIdxx}    /*파일ID*/
+           AND PFIL_NAME = #{pfilName}    /*물리파일명*/
+    </update>
+    
+    <!-- 공통첨부파일 첨부파일 상세테이블 삭제 -->
+    <delete id="deleteAttachFile">
+    <![CDATA[
+        DELETE FROM AFILED /* deleteAttachFile [공통] 첨부파일 상세테이블 삭제 */
+         WHERE FILE_IDXX = #{fileIdxx}    /*파일ID*/
+           AND PFIL_NAME = #{pfilName}    /*물리파일명*/
+    ]]>
+    </delete>
+
+</mapper>
