@@ -3,45 +3,6 @@
 
 <mapper namespace="www.sample.dao.TemplateDAO">
 	
-	<resultMap type="HashMap" id="templateMap">
-		<result property="rowNum" column="PAGING_RNUM" javaType="int"/>
-		<!-- 별도의 resultMap 사용시 주석 해제 후 사용할 것
-		resultMap_
-		--> 
-	</resultMap>
-	 
-	<sql id="whereTemplate">
-		<!-- 
-		<choose>
-		    <when test='id != null and id != "" '>
-		    </when>
-		    <otherwise>
-		    </otherwise>
-		</choose>
-		
-		<if test="searchVO != null">
-			<if test='searchVO.searchField != null and searchVO.searchField != "" and searchVO.searchText != null and searchVO.searchText != "" '>
-				<choose>
-				    <when test='searchVO.searchField == "title" '>
-				        AND TITLE LIKE CONCAT('%' , #{searchVO.searchText} , '%')
-				    </when>
-				    <when test='searchVO.searchField == "content" '>
-				        AND CONTENT LIKE CONCAT('%' , #{searchVO.searchText} , '%')
-				    </when>
-				    <when test='searchVO.searchField == "writeName" '>
-				        AND WRITE_NAME LIKE CONCAT('%' , #{searchVO.searchText} , '%')
-				    </when>
-				    <otherwise>
-				    </otherwise>
-				</choose>
-			</if>
-			<if test='searchVO.searchType != null and searchVO.searchType != "" '>
-	            AND TYPE = #{searchVO.searchType}
-			</if>
-		</if>
-		-->
-	</sql>
-		
 	<select id="getTemplateList"  resultMap="templateMap">
         /*
          SQL ID: www.sample.dao.TemplateDAO.getTemplateList

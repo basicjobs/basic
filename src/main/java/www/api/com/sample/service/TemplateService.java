@@ -1,4 +1,4 @@
-package www.api.smp.simple.service.impl;
+package www.api.com.sample.service;
 
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import www.com.util.CommonDao;
 import www.com.util.Sha256;
-import www.api.smp.simple.service.SimpleService;
 
 /**
  * 조직관리1 정보 관리 구현 클래스
@@ -22,7 +21,7 @@ import www.api.smp.simple.service.SimpleService;
  * @since 2024.01.12
  */
 @Service
-public class SimpleServiceImpl extends EgovAbstractServiceImpl implements SimpleService {
+public class TemplateService  {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -30,7 +29,7 @@ public class SimpleServiceImpl extends EgovAbstractServiceImpl implements Simple
     private CommonDao dao;
 
     
-    private String namespace = "www.api.smp.simple.Simple";
+    private String namespace = "www.api.smp.template.Template";
 
     /**
      * 등록
@@ -38,13 +37,9 @@ public class SimpleServiceImpl extends EgovAbstractServiceImpl implements Simple
      * @author 정지균
      * @since 2024.01.12
      */
-    @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void insertSimple(Map<String, Object> params) {	
-    	Sha256 sha256 = new Sha256();
-    	params.put("mberPw", sha256.encrypt(String.valueOf(params.get("mberPw"))));
-    	
-        dao.insert(namespace+".insertSimple", params);  		//마스터 인서트
+    public void insertTemplate(Map<String, Object> params) {	
+        dao.insert(namespace+".insertTemplate", params);  		//마스터 인서트
     }
     
     /**
@@ -53,13 +48,9 @@ public class SimpleServiceImpl extends EgovAbstractServiceImpl implements Simple
      * @author 정지균
      * @since 2024.01.12
      */
-    @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void updateSimple(Map<String, Object> params) {	
-    	Sha256 sha256 = new Sha256();
-    	params.put("mberPw", sha256.encrypt(String.valueOf(params.get("mberPw"))));
-    	
-        dao.insert(namespace+".updateSimple", params);  		//마스터 인서트
+    public void updateTemplate(Map<String, Object> params) {	
+        dao.insert(namespace+".updateTemplate", params);  		//마스터 인서트
     }
     
     /**
@@ -68,13 +59,9 @@ public class SimpleServiceImpl extends EgovAbstractServiceImpl implements Simple
      * @author 정지균
      * @since 2024.01.12
      */
-    @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void deleteSimple(Map<String, Object> params) {	
-    	Sha256 sha256 = new Sha256();
-    	params.put("mberPw", sha256.encrypt(String.valueOf(params.get("mberPw"))));
-    	
-        dao.insert(namespace+".deleteSimple", params);  		//마스터 인서트
+    public void deleteTemplate(Map<String, Object> params) {	
+        dao.insert(namespace+".deleteTemplate", params);  		//마스터 인서트
     }
     
     /**
@@ -85,10 +72,8 @@ public class SimpleServiceImpl extends EgovAbstractServiceImpl implements Simple
      * @param Map 조회 조건
      * @return List 조회 결과
      */
-    @Override
-    public List<Map<String, Object>> selectSimpleList(Map<String, Object> params) {
-        return dao.list(namespace + ".selectSimpleList", params);
+    public List<Map<String, Object>> selectTemplateList(Map<String, Object> params) {
+        return dao.list(namespace + ".selectTemplateList", params);
     }
-    
     
 }
