@@ -41,7 +41,7 @@ public class AuthServiceImpl extends EgovAbstractServiceImpl implements AuthServ
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void insertMember(Map<String, Object> params) {	
-    	Sha256 sha256 = new Sha256();
+    	
     	params.put("mberPw", sha256.encrypt(String.valueOf(params.get("mberPw"))));
     	
         dao.insert(namespace+".insertMember", params);  		//마스터 인서트
@@ -57,7 +57,7 @@ public class AuthServiceImpl extends EgovAbstractServiceImpl implements AuthServ
      */
     @Override
     public Map<String, Object> selectLogin(Map<String, Object> params) {
-    	Sha256 sha256 = new Sha256();
+    	
     	params.put("mberPw", sha256.encrypt(String.valueOf(params.get("mberPw")))); 
     	System.out.println("mberPw  = " + params.get("mberPw"));
         return dao.selectOne(namespace + ".selectLogin", params);
@@ -113,8 +113,8 @@ public class AuthServiceImpl extends EgovAbstractServiceImpl implements AuthServ
      */
     @Override
     public int changePassword(Map<String, Object> params) {
-    	Sha256 sha256 = new Sha256();
-    	params.put("password", sha256.encrypt(String.valueOf(params.get("password"))));
+    	
+    	params.put("password", String.valueOf(params.get("password")));
         return dao.update(namespace + ".changePassword", params);
     }
     

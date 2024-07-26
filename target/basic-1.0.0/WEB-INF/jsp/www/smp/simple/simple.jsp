@@ -43,7 +43,7 @@
     <script>
 $(document).ready(function() {
 
-	 $("#date").val(Util.getToday("yyyy-mm-dd"));
+	 //$("#date").val(Util.getToday("yyyy-mm-dd"));
 	 $("#date").datepicker({
 		 format: 'yyyy-mm-dd'
 		,autoclose: true
@@ -94,7 +94,7 @@ $(document).ready(function() {
 	    $('#updateTitle').focus();
 	});
 
-	boardList();
+	// boardList();  
 });
 
 function boardList(){
@@ -136,7 +136,7 @@ var simple = {
 	        data: JSON.stringify(sendData),
 	        success: function (data){
 	        	console.log(data);
-	        	var list = data.resultList;
+	        	var list = data.result;  
 	        	if ( list.length > 0 ) {
 	        		simple.fnSetList(list);
 	        		//Stat.fnStat();
@@ -291,7 +291,7 @@ var simple = {
 	    });
 	},
 	// 숫자 새기
-	fnTotalCount : function() {  
+	fnTotalCount : function() {
 		var totalAmount = 0;
 	    $("#DivSrchList .amountVal").each(function (i) {
 	        var amount = Number($(this).val());
@@ -299,8 +299,8 @@ var simple = {
 			totalAmount = totalAmount + amount;
 	    });
 	    console.log("totalAmount = " + totalAmount);
-	    $("#totalAmount").text(Util.numberToComma(totalAmount));
-	}
+	    //$("#totalAmount").text(Util.numberToComma(totalAmount));
+	}  
 }
 
 </script>

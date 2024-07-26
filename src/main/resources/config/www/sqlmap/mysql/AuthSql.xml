@@ -19,7 +19,7 @@
 					  ,#{email}  			AS EMAIL
 					  ,#{faxno}  			AS FAXNO
 					  ,#{id} 				AS ID
-					  ,#{password} 			AS PASSWORD
+					  ,encrypt('SAFEDB.POLICY','KTR_PSWD',#{password}) 			AS PASSWORD
 					  ,#{cstmrNo} 			AS CSTMR_NO
 					  ,#{mberSeCd} 			AS MBER_SE_CD
 					  ,#{cryalTelno} 		AS CRYAL_TELNO
@@ -474,7 +474,7 @@
 	<update id="changePassword" parameterType="map">
 	/* www.api.mba.auth.Auth.changePassword */
 		UPDATE OL_CU_TUPR001
-		SET PASSWORD = #{password}
+		SET PASSWORD = encrypt('SAFEDB.POLICY','KTR_PSWD',#{password})
 		WHERE MBER_NO = #{mberNo}
 	</update>
     

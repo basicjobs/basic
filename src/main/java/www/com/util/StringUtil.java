@@ -31,23 +31,22 @@ package www.com.util;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.security.SecureRandom;
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
-import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.safety.Whitelist;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class StringUtil {
     /**
@@ -106,6 +105,24 @@ public class StringUtil {
         }
         return returnVal;
     }
+    
+    public static String getDate() {
+        
+        Date makeDay = new Date();
+        DateFormat df = new SimpleDateFormat("yyyy. MM. dd.");
+        String str = df.format(makeDay);
+        return str;
+        
+    }
+    
+    public static String toKor(String p, String encoding) {
+        try {
+            return new String(p.getBytes("8859_1"), encoding);
+        } catch (UnsupportedEncodingException uee) {
+            return uee.toString();
+        }
+
+    } 
 
     /**
      * 문자열이 지정한 길이를 초과했을때 해당 문자열을 삭제하는 메서드
@@ -171,6 +188,32 @@ public class StringUtil {
     public static boolean isEmpty(Object obj) {
     	String str = isNullToString(obj);
         return  str.length() == 0;
+    }
+
+    /**
+     * <p>
+     * String이 비었거나("")|(" ") 혹은 null 인지 검증한다.
+     * </p>
+     *
+     * <pre>
+     *  StringUtil.isEmpty(null)      = true
+     *  StringUtil.isEmpty("")        = true
+     *  StringUtil.isEmpty(" ")       = true
+     *  StringUtil.isEmpty("bob")     = false
+     *  StringUtil.isEmpty("  bob  ") = false
+     * </pre>
+     *
+     * @param str - 체크 대상 스트링오브젝트이며 null을 허용함
+     * @return true - 입력받은 String 이 빈 문자열 또는 null인 경우
+     */
+    public static boolean isBlank(String str) {
+        int strLen;
+        if (str == null || (strLen = str.length()) == 0) return true;
+
+        for (int i = 0; i < strLen; i++) {
+            if ((Character.isWhitespace(str.charAt(i)) == false)) return false;
+        }
+        return true;
     }
     
     /**
@@ -440,7 +483,7 @@ public class StringUtil {
      */
     public static String nullConvert(Object src) {
     //if (src != null && src.getClass().getName().equals("java.math.BigDecimal")) {
-    if (src != null && src instanceof java.math.BigDecimal) {
+    if (src != null && src instanceof BigDecimal) {
         return ((BigDecimal)src).toString();
     }
 
@@ -1386,37 +1429,8 @@ public class StringUtil {
         return escapedBuffer.toString();
     }
     
-    /**
-     * 랜덤으로 생성된 문자열
-     * @return
-     */
-    public static String getRandomString(){
-    	Random random = new Random();
 
-		StringBuffer sb = new StringBuffer()
-    	.append((char)((int)(Math.random()*26)+65)) //대문자
-		.append((char)((int)(Math.random()*26)+97)) //소문자
-		.append("_") 
-		.append((char)((int)(Math.random()*15)+33))	//특수문자
-		.append(random.nextInt(100))				//숫자 아무거나
-		.append(DateUtil.getTodayTimeMilli().substring(10, 16)) //숫자 아무거나
-		;
-		
-		return sb.toString().replaceAll("\"", "").replaceAll("'", "");
-    }
-    
-    /**
-     * html, xml 태그들을 삭제한다.
-     * @param str 
-     * @return
-     */
-    public static String removeTags(String str){
-    	//return nullConvert(str).replaceAll("<[^>]*>", "");
-    	//return nullConvert(str).replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
-    	
-    	str = nullConvert(str);
-    	return Jsoup.clean(str, "", Whitelist.none(), new Document.OutputSettings().prettyPrint(false));
-    }
+
     
 
 	/**
@@ -1461,24 +1475,7 @@ public class StringUtil {
 		return rNo;
 	}
 	
-	/**
-	 * XSS 공격시도를 막기위한 WhiteList를 return 시킨다
-	 * 
-	 * Whitelist.relaxed()가 지원하는 기본 태그: 
-	 * a, b, blockquote, br, caption, cite, code, col, colgroup, dd, div, dl, dt, em, h1, h2, h3, h4, h5, h6, i, img, li, ol, p, pre, q, 
-	 * small, span, strike, strong, sub, sup, table, tbody, td, tfoot, th, thead, tr, u, ul
-	 * Links do not have an enforced rel=nofollow attribute, but you can add that if desired.
-	 * 
-	 * @return
-	 */
-	public static Whitelist getWwwWhiteList() {
-		Whitelist list = Whitelist.relaxed();
-		list.addAttributes(":all","style");
-		list.addAttributes(":all","class");
-		list.addAttributes(":all","href");
-		list.addAttributes(":all","src");
-		return list;
-	}
+
 	
 	/**
 	 * 문자열에 tag가 있는지 여부
@@ -1508,4 +1505,5 @@ public class StringUtil {
 		
 		return str.replaceAll("\r\n", "<br/>").replaceAll("\n", "<br/>");
 	}
+
 }

@@ -57,8 +57,8 @@ public class MypageServiceImpl extends EgovAbstractServiceImpl implements Mypage
      */
     @Override
     public Map<String, Object> checkPassword(Map<String, Object> params) {
-    	Sha256 sha256 = new Sha256();
-    	params.put("password", sha256.encrypt(String.valueOf(params.get("password"))));
+    	
+    	params.put("password", String.valueOf(params.get("password")));
         return dao.selectOne(authNamespace + ".selectLogin", params);
     }
     

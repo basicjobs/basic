@@ -1,48 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="www.sample.dao.TemplateDAO">
+<mapper namespace="www.api.mba.template.Template">
 	
-	<resultMap type="HashMap" id="templateMap">
-		<result property="rowNum" column="PAGING_RNUM" javaType="int"/>
-		<!-- 별도의 resultMap 사용시 주석 해제 후 사용할 것
-		resultMap_
-		--> 
-	</resultMap>
-	 
-	<sql id="whereTemplate">
-		<!-- 
-		<choose>
-		    <when test='id != null and id != "" '>
-		    </when>
-		    <otherwise>
-		    </otherwise>
-		</choose>
-		
-		<if test="searchVO != null">
-			<if test='searchVO.searchField != null and searchVO.searchField != "" and searchVO.searchText != null and searchVO.searchText != "" '>
-				<choose>
-				    <when test='searchVO.searchField == "title" '>
-				        AND TITLE LIKE CONCAT('%' , #{searchVO.searchText} , '%')
-				    </when>
-				    <when test='searchVO.searchField == "content" '>
-				        AND CONTENT LIKE CONCAT('%' , #{searchVO.searchText} , '%')
-				    </when>
-				    <when test='searchVO.searchField == "writeName" '>
-				        AND WRITE_NAME LIKE CONCAT('%' , #{searchVO.searchText} , '%')
-				    </when>
-				    <otherwise>
-				    </otherwise>
-				</choose>
-			</if>
-			<if test='searchVO.searchType != null and searchVO.searchType != "" '>
-	            AND TYPE = #{searchVO.searchType}
-			</if>
-		</if>
-		-->
-	</sql>
-		
-	<select id="getTemplateList"  resultMap="templateMap">
+	<select id="getTemplateList" parameterType="map"  resultType="CamelHashMap">
         /*
          SQL ID: www.sample.dao.TemplateDAO.getTemplateList
          Description : 목록 Query 
@@ -52,13 +13,6 @@
 			columns_
 		FROM table_
 		
-        <where>
-            <!-- 
-                <if test='id != null and id != "" '>
-                </if>
-            -->
-            <include refid="whereTemplate" />
-        </where>
         ORDER BY 
             columnId_ DESC
         <if test='pagingVO != null '>
@@ -68,25 +22,17 @@
         </if>
 	</select>
 	
-	<select id="getTemplateListCount"  resultType="int">
+	<select id="getTemplateListCount" parameterType="map"   resultType="int">
         /*
          SQL ID: www.sample.dao.TemplateDAO.getTemplateListCount
-         Description : 목록에서 레코드수 Query 
+         Description : 목록에서 레코드수 Query
         */
         SELECT
             COUNT(*) CNT
-        FROM table_
-        
-        <where>
-            <!-- 
-                <if test='id != null and id != "" '>
-                </if>
-            -->
-            <include refid="whereTemplate" />
-        </where> 
+        FROM table
 	</select>
 	
-	<select id="getTemplate"  resultMap="templateMap">
+	<select id="getTemplate" parameterType="map"  resultType="CamelHashMap">
 	    /*
 	     SQL ID: www.sample.dao.TemplateDAO.getTemplate
 	     Description : 상세조회 Query 
@@ -98,7 +44,7 @@
           columnId_ = valueId_
 	</select>
 	
-	<insert id="addTemplate">
+	<insert id="insertTemplate" parameterType="map" >
         /*
          SQL ID: www.sample.dao.TemplateDAO.addTemplate
          Description : 등록 Query 
@@ -114,7 +60,7 @@
 		)
 	</insert>
 	
-	<update id="modTemplate">
+	<update id="updateTemplate" parameterType="map" >
         /*
          SQL ID: www.sample.dao.TemplateDAO.modTemplate
          Description : 수정 Query 
@@ -128,7 +74,7 @@
 		  columnId_ = valueId_
 	</update>
 	
-	<delete id="removeTemplate">
+	<delete id="deleteTemplate" parameterType="map" >
         /*
          SQL ID: www.sample.dao.TemplateDAO.removeTemplate
          Description : 삭제 Query 

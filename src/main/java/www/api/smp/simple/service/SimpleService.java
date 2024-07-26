@@ -40,7 +40,7 @@ public class SimpleService  {
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public void insertSimple(Map<String, Object> params) {	
-    	Sha256 sha256 = new Sha256();
+    	
     	params.put("mberPw", sha256.encrypt(String.valueOf(params.get("mberPw"))));
     	
         dao.insert(namespace+".insertSimple", params);  		//마스터 인서트
@@ -54,7 +54,7 @@ public class SimpleService  {
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public void updateSimple(Map<String, Object> params) {	
-    	Sha256 sha256 = new Sha256();
+    	
     	params.put("mberPw", sha256.encrypt(String.valueOf(params.get("mberPw"))));
     	
         dao.insert(namespace+".updateSimple", params);  		//마스터 인서트
@@ -68,7 +68,7 @@ public class SimpleService  {
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public void deleteSimple(Map<String, Object> params) {	
-    	Sha256 sha256 = new Sha256();
+    	
     	params.put("mberPw", sha256.encrypt(String.valueOf(params.get("mberPw"))));
     	
         dao.insert(namespace+".deleteSimple", params);  		//마스터 인서트
